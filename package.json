@@ -27,6 +27,7 @@
     "scripts": {
         "build": "gulp default",
         "build:assets": "gulp assets",
+        "verify:assets": "bash scripts/verify-assets.sh",
         "gulp": "gulp"
     },
     "dependencies": {

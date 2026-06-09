@@ -263,6 +263,7 @@ gulp.task('prod-css', function() {
         './public/css/reports.css'
     ]).pipe(cleanCSS({compatibility: 'ie8'}));
 
+    // dest must be inside inject() so rev hash in header.php matches the written file
     var prodcss = series(opensourcepos1css, opensourcepos2css, opensourcepos3css, opensourcepos4css, opensourcepos5css)
         .pipe(concat('opensourcepos.min.css'))
         .pipe(rev());

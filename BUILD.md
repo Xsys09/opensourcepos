@@ -76,6 +76,21 @@ cp LICENSE public/license/LICENSE
 `npm run build:assets` skips `update-licenses` (Composer license reports). Empty
 `public/license/*.LICENSES` files must not be committed; they break the Config screen.
 
+After `npm run build:assets`, verify the production CSS bundle matches `header.php`:
+
+```
+npm run verify:assets
+```
+
+This checks that `app/Views/partial/header.php` references a hashed file under
+`public/resources/` (for example `public/resources/opensourcepos-abc123.min.css`) and that
+the bundle contains home layout rules. A common mistake is stripping `resources/` from the
+href and looking in `public/` at the wrong path.
+
+Production UI loads a single minified CSS file only when `CI_ENVIRONMENT` is `production` and
+debug mode is off. If `docker-compose.yml` sets `CI_ENVIRONMENT=development`, it overrides a
+mounted `.env` that says `production`, and the app serves unbundled debug assets instead.
+
 Configure production runtime with a host `.env` file (copy from `.env.example`) and mount it
 read-only in `docker-compose.yml`:
 

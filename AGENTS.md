@@ -23,6 +23,8 @@ This document provides guidance for AI agents working on the Open Source Point o
 
 - Install dependencies: `composer install && npm install`
 - Build assets: `npm run build` or `gulp`
+- Custom Docker images: `npm run build:assets` then `npm run verify:assets` before `docker build`
+- Gulp prod inject: pass `stream.pipe(gulp.dest(...))` into `inject()`, not `dest` before `inject`
 
 ## Conventions
 
