@@ -90,6 +90,10 @@ class Config extends Secure_Controller
             $license[$i]['text'] = 'LICENSE file must be in OSPOS license directory. You are not allowed to use OSPOS application until the distribution copy of LICENSE file is present.';
         }
 
+        if (!is_dir('license')) {
+            return $license;
+        }
+
         $dir = new DirectoryIterator('license');    // Read all the files in the dir license
 
         foreach ($dir as $fileinfo) {    // TODO: $fileinfo doesn't match our variable naming convention
@@ -208,9 +212,16 @@ class Config extends Secure_Controller
     private function _themes(): array    // TODO: Hungarian notation
     {
         $themes = [];
+        $bootswatchPath = 'resources/bootswatch';
+
+        if (!is_dir($bootswatchPath)) {
+            log_message('warning', 'Bootswatch themes directory is missing: ' . $bootswatchPath);
+
+            return ['flatly' => 'Flatly'];
+        }
 
         // Read all themes in the dist folder
-        $dir = new DirectoryIterator('resources/bootswatch');
+        $dir = new DirectoryIterator($bootswatchPath);
 
         foreach ($dir as $dirinfo) {    // TODO: $dirinfo doesn't follow naming convention
             if ($dirinfo->isDir() && !$dirinfo->isDot() && $dirinfo->getFileName() != 'fonts') {
