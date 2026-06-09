@@ -1,5 +1,14 @@
 @media print {
 
+    html,
+    body,
+    .wrapper,
+    .container,
+    .row {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
     .no-print,
     .no-print * {
         display: none !important;
@@ -11,13 +20,12 @@
         font-size: 75%;
     }
 
-    .topbar {
-        display: none;
-    }
-
+    .topbar,
+    .navbar,
+    .navbar-default,
     #menubar,
     #footer {
-        display: none;
+        display: none !important;
     }
 
     #sale_return_policy {
