@@ -26,6 +26,7 @@
     "main": "index.php",
     "scripts": {
         "build": "gulp default",
+        "build:assets": "gulp assets",
         "gulp": "gulp"
     },
     "dependencies": {

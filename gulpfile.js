@@ -297,10 +297,9 @@ gulp.task('copy-menubar', function() {
 });
 
 
-// Run all required tasks
-gulp.task('default',
+// Frontend assets only (no Composer license reports). Use when Composer is unavailable.
+gulp.task('assets',
     gulp.series('clean',
-        'update-licenses',
         'copy-bootswatch',
         'copy-bootswatch5',
         'copy-bootstrap',
@@ -313,3 +312,7 @@ gulp.task('default',
         'copy-fonts',
         'copy-menubar'
     ));
+
+// Run all required tasks
+gulp.task('default',
+    gulp.series('update-licenses', 'assets'));

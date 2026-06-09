@@ -41,9 +41,9 @@ function check_encryption(): bool
             $config_file = file_get_contents($config_path);
 
             if (preg_match('/^\s*encryption\.key\s*=/m', $config_file)) {
-                $config_file = preg_replace("/^(\s*encryption\.key\s*=\s*).*/m", "\$1'$key'", $config_file, 1);
+                $config_file = preg_replace("/^(\s*encryption\.key\s*=\s*).*/m", "\$1hex2bin:$key", $config_file, 1);
             } else {
-                $config_file .= "\nencryption.key = '$key'\n";
+                $config_file .= "\nencryption.key = hex2bin:$key\n";
             }
 
             if (!empty($old_key)) {

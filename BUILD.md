@@ -54,6 +54,39 @@ export GROUPID=$(id -g)
 docker-compose -f docker-compose.dev.yml up
 ```
 
+### Custom production Docker image
+
+Building a runtime image from source requires **both** PHP and frontend build steps before `docker build`:
+
+```
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+```
+
+If Composer is not available in the Node environment (for example when using `docker run node:20`),
+use the assets-only build, then copy the OSPOS license file manually:
+
+```
+npm install
+npm run build:assets
+cp LICENSE public/license/LICENSE
+```
+
+`npm run build:assets` skips `update-licenses` (Composer license reports). Empty
+`public/license/*.LICENSES` files must not be committed; they break the Config screen.
+
+Configure production runtime with a host `.env` file (copy from `.env.example`) and mount it
+read-only in `docker-compose.yml`:
+
+```
+volumes:
+  - ./.env:/app/.env:ro
+```
+
+Set `encryption.key` using CodeIgniter's `hex2bin:` format and list every public hostname in
+`app.allowedHostnames` or `ALLOWED_HOSTNAMES`.
+
 ## The Result
 
 The build creates a developer version of a runnable instance of OSPOS.  It contains a ton of developer stuff that **should not be deployed to a production environment**.

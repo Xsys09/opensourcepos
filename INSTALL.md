@@ -78,6 +78,38 @@ Start the containers using the following command
     docker-compose up
 ```
 
+### Self-hosted / private network (e.g. Tailscale)
+
+When OSPOS is reached by a hostname other than `localhost`, set that name in **both** places:
+
+```bash
+# docker-compose.yml
+ALLOWED_HOSTNAMES=your-hostname
+
+# .env (recommended for production)
+app.allowedHostnames = 'your-hostname'
+```
+
+If `ALLOWED_HOSTNAMES` only contains `localhost`, OSPOS generates URLs pointing at
+`http://localhost/`, which breaks CSS, redirects, and module links for remote browsers.
+
+Create `.env` from `.env.example` on the host and mount it into the container:
+
+```yaml
+volumes:
+  - ./.env:/app/.env:ro
+```
+
+Set a production encryption key before using Sales or Config integrations:
+
+```bash
+php spark key:generate --prefix hex2bin
+# or on the host: encryption.key = hex2bin:<output of openssl rand -hex 32>
+```
+
+Custom images built from source must run the full build documented in [BUILD.md](BUILD.md)
+(`composer install`, `npm install`, `npm run build` or `npm run build:assets`).
+
 ## Nginx install using Docker
 
 Since OSPOS version `3.3.0` the Docker installation offers a reverse proxy based on Nginx with a Let's Encrypt TLS certificate termination (aka HTTPS connection).

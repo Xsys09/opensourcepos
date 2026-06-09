@@ -109,13 +109,13 @@ class Config extends Secure_Controller
                     } else {
                         $license[$i]['text'] = $license_text_file . ' file is missing';
                     }
-                } elseif ($fileinfo->getBasename() == 'composer.LICENSES') {
+                } elseif ($fileinfo->getBasename() == 'composer.LICENSES' && $fileinfo->getSize() > 0) {
                     // Set a flag to indicate that the composer.LICENSES file is available and needs to be attached at the end
                     $composer = true;
-                } elseif ($fileinfo->getBasename() == 'npm-prod.LICENSES') {
+                } elseif ($fileinfo->getBasename() == 'npm-prod.LICENSES' && $fileinfo->getSize() > 0) {
                     // Set a flag to indicate that the npm-prod.LICENSES file is available and needs to be attached at the end
                     $npmProd = true;
-                } elseif ($fileinfo->getBasename() == 'npm-dev.LICENSES') {
+                } elseif ($fileinfo->getBasename() == 'npm-dev.LICENSES' && $fileinfo->getSize() > 0) {
                     // Set a flag to indicate that the npm-dev.LICENSES file is available and needs to be attached at the end
                     $npmDev = true;
                 }
@@ -158,6 +158,10 @@ class Config extends Secure_Controller
             $file = file_get_contents('license/npm-prod.LICENSES');
             $array = json_decode($file, true);
 
+            if (!is_array($array)) {
+                $array = [];
+            }
+
             foreach ($array as $dependency) {
                 $license[$i]['text'] .= "library: {$dependency['name']}\n";
                 $license[$i]['text'] .= "authors: {$dependency['author']}\n";
@@ -177,6 +181,10 @@ class Config extends Secure_Controller
 
             $file = file_get_contents('license/npm-dev.LICENSES');
             $array = json_decode($file, true);
+
+            if (!is_array($array)) {
+                $array = [];
+            }
 
             foreach ($array as $dependency) {
                 $license[$i]['text'] .= "library: {$dependency['name']}\n";
