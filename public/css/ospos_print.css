@@ -9,6 +9,33 @@
         min-height: 0 !important;
     }
 
+    /* CodeIgniter debug toolbar (flame icon) must not print */
+    #debug-icon,
+    #toolbarContainer,
+    #debug-bar,
+    .debug-bar,
+    .toolbar {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Thermal receipts: print only the receipt block, not the full page chrome */
+    body:has(#receipt_wrapper) * {
+        visibility: hidden;
+    }
+
+    body:has(#receipt_wrapper) #receipt_wrapper,
+    body:has(#receipt_wrapper) #receipt_wrapper * {
+        visibility: visible;
+    }
+
+    body:has(#receipt_wrapper) #receipt_wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
     .no-print,
     .no-print * {
         display: none !important;
