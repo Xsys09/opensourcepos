@@ -141,7 +141,7 @@ gulp.task('debug-js', function() {
 
 gulp.task('prod-js', function() {
 
-    var prod0js = gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(rev()).pipe(gulp.dest('public/resources'));
+    var prod0js = gulp.src('./node_modules/jquery/dist/jquery.min.js').pipe(rev());
 
     var opensourcepos1js = gulp.src(['./node_modules/bootstrap/dist/js/bootstrap.min.js',
         './node_modules/bootstrap-table/dist/bootstrap-table.min.js',
@@ -181,11 +181,13 @@ gulp.task('prod-js', function() {
 
 
     var prod1js = series(opensourcepos1js, opensourcepos2js).pipe(concat('opensourcepos.min.js'))
-        .pipe(rev())
-        .pipe(gulp.dest('./public/resources/'));
+        .pipe(rev());
 
     return gulp.src('./app/Views/partial/header.php').pipe(inject(
-        series(prod0js, prod1js), {addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:prod:js -->'})).pipe(gulp.dest('./app/Views/partial'));
+        series(
+            prod0js.pipe(gulp.dest('public/resources')),
+            prod1js.pipe(gulp.dest('public/resources'))
+        ), {addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:prod:js -->'})).pipe(gulp.dest('./app/Views/partial'));
 
 });
 
@@ -262,10 +264,13 @@ gulp.task('prod-css', function() {
     ]).pipe(cleanCSS({compatibility: 'ie8'}));
 
     var prodcss = series(opensourcepos1css, opensourcepos2css, opensourcepos3css, opensourcepos4css, opensourcepos5css)
-        .pipe(concat('opensourcepos.min.css')).pipe(rev()).pipe(gulp.dest('public/resources'));
+        .pipe(concat('opensourcepos.min.css'))
+        .pipe(rev());
 
-
-    return gulp.src('./app/Views/partial/header.php').pipe(inject(prodcss,{addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:prod:css -->'})).pipe(gulp.dest('./app/Views/partial'));
+    return gulp.src('./app/Views/partial/header.php').pipe(inject(
+        prodcss.pipe(gulp.dest('public/resources')),
+        {addRootSlash: false, ignorePath: '/public/', starttag: '<!-- inject:prod:css -->'}
+    )).pipe(gulp.dest('./app/Views/partial'));
 });
 
 
